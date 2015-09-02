@@ -18,7 +18,7 @@ changePowerState = {
     "reboot"  : True ,
     "suspend"  : powerStates["suspended"],
     }
-
+validAnsibleStates=['present', 'absent']+changePowerState.keys()
 def get_obj(content, vimtype, name):
     container = content.viewManager.CreateContainerView(content.rootFolder, vimtype, True)
     for c in container.view:
@@ -84,7 +84,7 @@ def main():
             nics=dict(type='list'),
             cdroms=dict(type='list'),
 
-            state=dict(choices=['present', 'absent'], default='present'),
+            state=dict(choices=validAnsibleStates, default='present'),
 
             login_host=dict(required=True),
             login_user=dict(required=True),
