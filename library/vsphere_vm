@@ -15,9 +15,16 @@ powerStates = {
 changePowerState = {
     "shutdown": powerStates["poweredOff"],
     "start"   : powerStates["poweredOn"],
-    "reboot"  : True ,
+    "reboot"  : powerStates["poweredOff"] ,
     "suspend"  : powerStates["suspended"],
     }
+vmTasks = {
+    "shutdown" : "PowerOffVM_Task",
+    "start"    : "PowerOnVM_Task",
+    "reboot"  : "ResetVM_Task",
+    "suspend"  : "SuspendVM_Task",
+    }
+    
 validAnsibleStates=['present', 'absent']+changePowerState.keys()
 def get_obj(content, vimtype, name):
     container = content.viewManager.CreateContainerView(content.rootFolder, vimtype, True)
@@ -227,17 +234,9 @@ def main():
 
             changed = True
     elif state in changePowerState.keys():
-        currentPowerState = vm.runtime.powerState
-        vmTasks = { 
-            "shutdown" : [vm.PowerOffVM_Task()],
-            "start"    : [vm.PowerOnVM_Task()],
-            "restart"  : [vm.ResetVM_Task()],
-            "suspend"  : [vm.SuspendVM_Task()],
-            }
-            
-        if  currentPowerState != changePowerState[state]:
-            taskList = vmTasks[state]
-            wait_for_tasks(si, taskList)
+        if  vm.runtime.powerState != changePowerState[state]:
+            task = getattr(vm, vmTasks[state])()
+            wait_for_tasks(si, [task])
             changed = True
 
     module.exit_json(changed=changed)
