@@ -237,7 +237,7 @@ def main():
             
         if  currentPowerState != changePowerState[state]:
             taskList = vmTasks[state]
-            wait_for_tasks(si, [taskList])
+            wait_for_tasks(si, taskList)
             changed = True
 
     module.exit_json(changed=changed)
