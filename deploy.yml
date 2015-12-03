@@ -40,7 +40,7 @@
         nics:
           - network: "{{ env_name }}-pxe"
         cdroms:
-          - iso_path: "[{{ esxi_datastore }}] {{ iso_path }}"
+          - iso_path: "[{{ iso_datastore }}] {{ iso_path }}"
         state: present
 
         login_host: "{{ vsphere_login_host }}"
