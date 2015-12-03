@@ -5,7 +5,12 @@ env_name: sample
 esxi_host: YOUR_ESXI_HOST
 
 # Name of the datastore on the ESXi host (for example: suplab01-datastore1)
+# If your ISOs are stored on a separate datastore, you will want to edit this to reference the correct Datastore
+# iso_datastore: YOUR_ISO_DATASTORE
 esxi_datastore: YOUR_ESXI_DATASTORE
+iso_datastore: "{{ esxi_datastore }}"
+
+
 
 # Name of the ISO to mount on the Fuel master VM
 iso_path: MirantisOpenStack-6.0.iso
